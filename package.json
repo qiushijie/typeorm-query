@@ -1,0 +1,27 @@
+{
+  "name": "typeorm-query",
+  "version": "0.0.1",
+  "description": "typeorm query",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "build": "tsc"
+  },
+  "author": "qiushijie",
+  "license": "ISC",
+  "peerDependencies": {
+    "typeorm": "^0.2.18"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.17",
+    "@types/node": "^12.7.1",
+    "jest": "^24.8.0",
+    "mysql": "^2.17.1",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^4.0.9",
+    "ts-jest": "^24.0.2",
+    "typeorm": "^0.2.18",
+    "typescript": "^3.5.3"
+  }
+}
