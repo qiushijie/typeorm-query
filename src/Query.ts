@@ -1,8 +1,9 @@
 import {Connection, EntityMetadata, getConnection, ObjectLiteral, SelectQueryBuilder} from 'typeorm';
 import {
+  QueryAllNode,
   QueryColumn,
   QueryCompareExp,
-  QueryExp,
+  QueryExp, QueryIgnoreNode,
   QueryLogicExp,
   QueryLogicOp,
   QueryNestExp,
@@ -62,7 +63,19 @@ export class Query<Entity = {}> {
       }
       if (node.children && node.children.length > 0) {
         const childSelection = [];
+        // *
+        let queryAll = false;
+        // !
+        const ignoreSelection = [];
         for (const child of node.children) {
+          if (child instanceof QueryAllNode) {
+            queryAll = true;
+            continue;
+          }
+          if (child instanceof QueryIgnoreNode) {
+            ignoreSelection.push(child.name);
+            continue;
+          }
           // path.name用 . 来索引属性
           const propertyName = `${path}.${child.name}`;
           // 用 _ 来连接实体
@@ -83,6 +96,15 @@ export class Query<Entity = {}> {
               meta: relation.inverseEntityMetadata
             };
             stack.push(wrapper);
+          }
+        }
+        if (queryAll) {
+          for (const column of meta.columns) {
+            if (column.relationMetadata) continue;
+            if (ignoreSelection.indexOf(column.propertyName) >= 0) continue;
+            if (childSelection.indexOf(column.propertyName) >= 0) continue;
+            const propertyName = `${path}.${column.propertyName}`;
+            childSelection.push(propertyName);
           }
         }
         selection.push(...childSelection);

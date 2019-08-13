@@ -192,3 +192,27 @@ test('test limit offset', async () => {
   expect(2).toBe(result.length);
   expect(users.slice(2, 4).map(u => u.id)).toEqual(result.map(u => u.id));
 });
+
+test('test query all', async () => {
+  const user = createUser();
+  await connection.getRepository(User).save(user);
+  const result = await createTreeQueryBuilder<User>()
+    .query('user(id = $id) : {*}')
+    .param('id', user.id)
+    .getOne();
+  expect(result!.id).toBe(user.id);
+  expect(result!.firstName).toBe(user.firstName);
+  expect(result!.lastName).toBe(user.lastName);
+  expect(result!.isActive).toBe(user.isActive);
+  expect(result!.profile).toBeUndefined();
+});
+
+test('test query all ignore', async () => {
+  const user = createUser();
+  await connection.getRepository(User).save(user);
+  const result = await createTreeQueryBuilder<User>()
+    .query('user(id = $id) : {*, !isActive}')
+    .param('id', user.id)
+    .getOne();
+  expect(result!.isActive).toBeUndefined();
+});
