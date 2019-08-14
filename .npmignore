@@ -8,4 +8,5 @@ src
 jest.config.js
 tsconfig.json
 
+doc
 coverage

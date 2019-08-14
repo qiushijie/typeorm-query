@@ -2,7 +2,7 @@
   "name": "typeorm-query",
   "version": "0.0.1",
   "description": "typeorm query",
-  "main": "index.js",
+  "main": "dist/Query.js",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",

@@ -123,15 +123,6 @@ export enum QueryCompareOp {
   Like = 'like'
 }
 
-export class QueryOrder {
-  readonly columns: Array<QueryColumn>;
-  readonly sort: QueryOrderSort;
-  constructor(columns: Array<QueryColumn>, sort: QueryOrderSort) {
-    this.columns = columns;
-    this.sort = sort;
-  }
-}
-
 export enum QueryOrderSort {
   Asc = 'asc',
   Desc = 'desc'
