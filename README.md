@@ -142,8 +142,8 @@ const count = await createTreeQueryBuilder()
 
 Use the tree structure of the entity to describe all the data that needs to be queried. Similar to the json syntax, only the part of the key is needed. After the query, the value is filled with the structure of the current key.
 
-```typescript
-实体名Entity name(条件conditions): {key1, key1 ... keyn(子条件Subconditions): {child1, child2 ... childn}}
+```
+Entity name(conditions): {key1, key1 ... keyn(Subconditions): {child1, child2 ... childn}}
 ```
 
 Query the firstName, lastName and profile's gender and photo of the user according to id.
