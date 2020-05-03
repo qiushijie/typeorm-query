@@ -1,4 +1,4 @@
-import Token, {TokenType} from './token';
+import Token, {TokenType} from './Token';
 
 export default class Lexer {
   private query: string;
