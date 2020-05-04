@@ -12,6 +12,7 @@ import {
   QueryValue
 } from './Node';
 import Parser from './Parser';
+import {firstToUpperCase} from './util';
 
 interface QueryWrapper {
   node: QueryNode;
@@ -20,15 +21,23 @@ interface QueryWrapper {
 }
 
 export class Query<Entity = {}> {
+  public static getConnection: () => Connection;
   private connection: Connection;
   private node: QueryNode;
   private queryBuilder: SelectQueryBuilder<Entity>;
   constructor(connection?: Connection) {
-    this.connection = connection ? connection : getConnection();
+    if (connection) {
+      this.connection = connection;
+    } else if (Query.getConnection) {
+      this.connection = Query.getConnection();
+    } else {
+      this.connection = getConnection();
+    }
   }
   query(query: string): Query<Entity> {
     this.node = Parser.parse(query);
-    const repository = this.connection.getRepository<Entity>(this.node.name);
+    const name = firstToUpperCase(this.node.name);
+    const repository = this.connection.getRepository<Entity>(name);
     this.queryBuilder = repository.createQueryBuilder(this.node.name);
     return this;
   }
@@ -49,11 +58,12 @@ export class Query<Entity = {}> {
     return this;
   }
   private fill() {
+    const name = firstToUpperCase(this.node.name);
     const selection: string[] = [];
     const wrapper = {
       node: this.node,
       path: this.node.name,
-      meta: this.connection.getMetadata(this.node.name)
+      meta: this.connection.getMetadata(name)
     };
     const stack: QueryWrapper[] = [wrapper];
     while (stack.length > 0) {
