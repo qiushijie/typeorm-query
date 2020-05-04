@@ -1,6 +1,6 @@
 {
   "name": "typeorm-query",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "typeorm query",
   "main": "dist/Query.js",
   "scripts": {
