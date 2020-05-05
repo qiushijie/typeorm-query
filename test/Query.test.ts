@@ -53,6 +53,19 @@ test('test query by id', async () => {
   expect(user.lastName).toBe(result!.lastName);
 });
 
+test('test query by isActive', async () => {
+  const user = createUser();
+  user.isActive = false;
+  await connection.getRepository(User).save(user);
+
+  const result = await createTreeQueryBuilder<User>()
+    .query('user(id = $id && isActive = false): {firstName, lastName}')
+    .param('id', user.id)
+    .getOne();
+  expect(user.firstName).toBe(result!.firstName);
+  expect(user.lastName).toBe(result!.lastName);
+});
+
 test('test query oneToOne', async () => {
   const profile = new Profile();
   profile.gender = randomString(8);
